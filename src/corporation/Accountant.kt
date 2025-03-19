@@ -7,7 +7,6 @@ class Accountant(
     age: Int
 ) : Worker(name, age) {
 
-    val items = mutableListOf<ProductCard>()
     val file = File("Product_Type.txt")
     override fun work() {
 
@@ -50,18 +49,20 @@ class Accountant(
     }
 
     fun saveProductCardToFile(productCard: ProductCard) {
-        file.appendText("${productCard.name}%")
-        file.appendText("${productCard.price}%")
+        file.appendText("${productCard.name}%${productCard.price}%")
         when (productCard) {
-            is FoodProductCard -> file.appendText("${productCard.shelfLife}%${ProductType.FOOD}\n")
-            is ShoeCard -> file.appendText("${productCard.size}% ${ProductType.SHOE}\n")
-            is AppliancesCard -> file.appendText("${productCard.brand}%${ProductType.APPLIANCE}\n")
+            is FoodProductCard -> file.appendText("${productCard.shelfLife}%")
+            is ShoeCard -> file.appendText("${productCard.size}% ")
+            is AppliancesCard -> file.appendText("${productCard.brand}%")
         }
+        file.appendText("${productCard.type}")
+
     }
 
     fun loadAllCards(): MutableList<ProductCard> {
 
         val cards = mutableListOf<ProductCard>()
+        if (cards.isEmpty()) return cards
         val content = file.readText().trim()
         val cardsAsString = content.split("\n")
         for (card in cardsAsString) {
@@ -93,31 +94,8 @@ class Accountant(
     }
 
     fun showAllItems() {
-        val content = file.readText().trim()
-        if (content.isEmpty()) return
-        val cardsAsString = content.split("\n")
-        for (card in cardsAsString) {
-            val properties = card.split("%")
-            val name = properties[0]
-            val price = properties[1].toInt()
-            val type = properties.last()
-            val productType = ProductType.valueOf(type)
-            val productCard = when (productType) {
-                ProductType.FOOD -> {
-                    val shelfLifeFood = properties[2]
-                    FoodProductCard(name, price, shelfLifeFood.toInt())
-                }
-
-                ProductType.APPLIANCE -> {
-                    val brand = properties[2]
-                    AppliancesCard(name, price, brand)
-                }
-
-                ProductType.SHOE -> {
-                    val size = properties[2]
-                    ShoeCard(name, price, size.toInt())
-                }
-            }
+        val productCards = loadAllCards()
+        for (productCard in productCards){
             productCard.printInfo()
         }
     }
@@ -136,32 +114,30 @@ class Accountant(
         val productType = productTypes[productTypeIndex]
         println("Enter the name:")
         val name = readln()
-        file.appendText("$name%")
         println("Enter the price:")
         val price = readln().toInt()
-        file.appendText("$price%")
-        ProductType.valueOf("FOOD")
-        when (productType) {
+        val card = when (productType) {
             ProductType.FOOD -> {
                 println("Enter the shelfLife:")
                 val shelfLifeFood = readln().toInt()
-                file.appendText("$shelfLifeFood%")
+                FoodProductCard(name, price,shelfLifeFood)
             }
 
             ProductType.APPLIANCE -> {
                 println("Enter the brand:")
                 val brand = readln()
-                file.appendText("$brand%")
+
+                AppliancesCard(name, price, brand)
             }
 
             ProductType.SHOE -> {
                 println("Enter the size:")
                 val size = readln().toInt()
-                file.appendText("$size%")
+                ShoeCard(name, price, size)
             }
 
         }
-        file.appendText("$productType\n")
+        saveProductCardToFile(card)
     }
 }
 
