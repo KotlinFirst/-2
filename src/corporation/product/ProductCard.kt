@@ -1,9 +1,9 @@
-package corporation
+package corporation.product
 
 open class ProductCard(
     val name:String,
     val price:Int,
-    val type:ProductType
+    val type: ProductType
 ) {
     open fun printInfo(){
         print("name: $name, price: $price, Product Type: ${type.title} ")

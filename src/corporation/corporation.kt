@@ -1,5 +1,9 @@
 package corporation
 
+import corporation.worker.Accountant
+import corporation.worker.Director
+import corporation.worker.Worker
+
 fun main() {
 //    val sneakers = ShoeCard("Sneakers", 3200, 41)
 //    val apple = FoodProductCard("apple", 39, 4)
@@ -7,10 +11,8 @@ fun main() {
 //    sneakers.printInfo()
 //    apple.printInfo()
 //    vacuumCleaner.printInfo()
-    val director1 = Director("Vasya", 48)
-    val director2 = Director("John", 39)
-    val accountant = Accountant("Nastya", 36)
-    val workers = listOf<Worker>(director1,director2,accountant)
+    val accountant = Accountant(0,"Nasty", 36)
+    val workers = listOf<Worker>(accountant)
     for (worker in workers){
         worker.work()
     }

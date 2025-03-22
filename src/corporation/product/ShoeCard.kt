@@ -1,4 +1,4 @@
-package corporation
+package corporation.product
 
 class ShoeCard(
     name: String,

@@ -1,6 +1,5 @@
 package files
 
-import corporation.OperationCodes
 import java.io.File
 
 fun main() {
